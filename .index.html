@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rougelike Fighting Game</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .game-container { margin-top: 20px; }
+    .stats { margin-bottom: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Rougelike Fighting Game</h1>
+  
+  <div id="start-game">
+    <label for="player-name">Enter your name:</label>
+    <input type="text" id="player-name" placeholder="Your name">
+    <button onclick="startGame()">Start Game</button>
+  </div>
+
+  <div id="game" class="game-container" style="display:none;">
+    <div class="stats">
+      <p id="player-stats"></p>
+      <p id="enemy-stats"></p>
+    </div>
+    
+    <div id="combat-actions">
+      <button onclick="fireball()">Fireball</button>
+      <button onclick="heal()">Heal</button>
+      <button onclick="swordAttack()">Sword Attack</button>
+      <button onclick="block()">Block</button>
+    </div>
+
+    <div id="game-result"></div>
+  </div>
+
+  <script>
+    let player = {
+      name: '',
+      health: 100,
+      magic: 100,
+      reviveCrystals: 5,
+      level: 0
+    };
+
+    let enemy = {
+      name: '',
+      health: 50,
+      attack: 10
+    };
+
+    function startGame() {
+      player.name = document.getElementById("player-name").value;
+      if (!player.name) {
+        alert("Please enter a name.");
+        return;
+      }
+
+      document.getElementById("start-game").style.display = 'none';
+      document.getElementById("game").style.display = 'block';
+      
+      // Generate a random enemy
+      generateEnemy();
+
+      updateStats();
+    }
+
+    function generateEnemy() {
+      // Randomly choose an enemy type
+      const enemyTypes = ['Goblin', 'Orc', 'Dragon'];
+      const randomType = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+
+      // Set enemy stats based on the type
+      enemy.name = randomType;
+      switch (randomType) {
+        case 'Goblin':
+          enemy.health = 30 + Math.floor(Math.random() * 20); // Health between 30 and 50
+          enemy.attack = 5 + Math.floor(Math.random() * 5); // Attack between 5 and 10
+          break;
+        case 'Orc':
+          enemy.health = 60 + Math.floor(Math.random() * 30); // Health between 60 and 90
+          enemy.attack = 10 + Math.floor(Math.random() * 10); // Attack between 10 and 20
+          break;
+        case 'Dragon':
+          enemy.health = 120 + Math.floor(Math.random() * 80); // Health between 120 and 200
+          enemy.attack = 20 + Math.floor(Math.random() * 20); // Attack between 20 and 40
+          break;
+      }
+    }
+//     Update stats :3
+    function updateStats() {
+      document.getElementById("player-stats").innerHTML = `
+        <strong>${player.name}'s Stats:</strong><br>
+        Health: ${player.health} | Magic: ${player.magic} | Revive Crystals: ${player.reviveCrystals} | Level: ${player.level}
+      `;
+      document.getElementById("enemy-stats").innerHTML = `
+        <strong>${enemy.name} Stats:</strong><br>
+        Health: ${enemy.health} | Attack: ${enemy.attack}
+      `;
+    }
+//     Fireball logic :3
+    function fireball() {
+      if (player.magic >= 5) {
+        player.magic -= 5;
+        enemy.health -= 15;
+        updateStats();
+        checkCombatStatus();
+      } else {
+        alert("Not enough magic!");
+      }
+    }
+//     Heal logic :3
+    function heal() {
+      if (player.magic >= 5) {
+        player.magic -= 5;
+        player.health += 15;
+        if (player.health > 100) player.health = 100; // Cap at max health
+        updateStats();
+      } else {
+        alert("Not enough magic!");
+      }
+    }
+//     Sword attack logic :3
+    function swordAttack() {
+      enemy.health -= 10;
+      updateStats();
+      checkCombatStatus();
+    }
+
+    function block() {
+      // Block logic would be handled in enemy turn :3
+      alert("You block the next incoming attack!");
+    }
+
+    function checkCombatStatus() {
+      if (enemy.health <= 0) {
+        document.getElementById("game-result").innerHTML = `<h2>You defeated the ${enemy.name}!</h2>`;
+        return;
+      }
+
+      // Enemy's turn (simple attack logic)
+      if (Math.random() < 0.5) {
+        if (player.health > 0) {
+          player.health -= enemy.attack;
+          alert(`${enemy.name} attacks you for ${enemy.attack} damage!`);
+          updateStats();
+        }
+      }
+//       Check if player has died :3
+      if (player.health <= 0) {
+        if (player.reviveCrystals > 0) {
+          let useRevive = confirm("You have died! Use a revive crystal?");
+          if (useRevive) {
+            player.reviveCrystals -= 1;
+            player.health = 100;
+            updateStats();
+          } else {
+            document.getElementById("game-result").innerHTML = "<h2>Game Over! You gave up.</h2>";
+          }
+        } else {
+          document.getElementById("game-result").innerHTML = "<h2>Game Over! You have no revive crystals left.</h2>";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
