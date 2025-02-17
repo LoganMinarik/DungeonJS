@@ -172,3 +172,17 @@ let player = {
       alert(`Level up! You are now level ${player.level}.`);
     }
   }
+
+  document.addEventListener("keydown", function(event) {
+    if (event.key === "1") {
+      fireball();
+    } else if (event.key === "2") {
+      heal();
+    } else if (event.key === "3") {
+      swordAttack();
+    } else if (event.key === "4") {
+      block();
+    } else if (event.key === "5") {
+      UseReviveCrystal();
+    }
+    });
