@@ -9,7 +9,7 @@ let player = {
   level: 0,
   xp: 0,
   inventory: Array(20).fill("Potion"),
-  // #For dev testing# inventory: Array(20).fill("Potion").concat(["DeathClaw Juice", "DeathClaw Juice", "Potion+", "Ether", "PP Up", "Bomb-ba", "Elixir", "Nyan Cat", "Doge"]),
+  // #For dev testing# inventory: Array(20).fill("Potion").concat(["DeathClaw Juice", "DeathClaw Juice", "Potion+", "Ether", "PP Up", "Bomb-ba", "Elixir", "Nyan Cat", "Doge Coin"]),
   reviveCrystals: 5,
 };
 let enemy = {
@@ -146,7 +146,7 @@ function updateInventory() {
     "Bomb-ba": "Rare",
     "Elixir": "Epic",
     "Nyan Cat": "Mythical",
-    "Doge": "Mythical",
+    "Doge Coin": "Mythical",
   };
 
   for (const [item, count] of Object.entries(itemCounts)) {
@@ -229,10 +229,8 @@ function useItem() {
       player.selectedItem = undefined;
       updateStats();
     }
-    else if (selectedItem === "Doge") {
-      player.health = Math.min(player.health + 200, player.maxHealth);
-      player.magic = Math.min(player.magic + 200, player.maxMagic);
-      displayMessage(`You used a ${selectedItem} and restored 200 health and magic!`);
+    else if (selectedItem === "Doge Coin") {
+      displayMessage(`You used a ${selectedItem} and realized it's not a usable item!🤓👆"well achuly it's a valuable item but you have low IQ and don't understand how decentualized markets work" - Some Random Nerd 2025`);
       player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
       player.selectedItem = undefined;
       updateStats();
@@ -304,6 +302,12 @@ function checkCombatStatus() {
     if (enemy.name === 'Mimic' && Math.random() < .5) { // 50% chance to drop a rare item
       player.inventory.push("PP Up");
       displayMessage("You obtained PP Up!");
+    }
+    if (enemy.name === 'Mimic' && Math.random() < 0.5) { // 50% chance to drop a mythical item
+      for (let i = 0; i < 500; i++) {
+        player.inventory.push("Doge Coin");
+      }
+      displayMessage("You obtained 500 Doge Coins!");
     }
     if (enemy.name === 'Treasure Guardian' && Math.random() < .5) { // 50% chance to drop a legendary item
       player.inventory.push("Elixir");
