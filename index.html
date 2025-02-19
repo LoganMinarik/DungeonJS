@@ -53,6 +53,19 @@
       background: white;
       color: black;
     }
+
+    #inventory-section {
+      background: #000;
+      color: #00ff00;
+      padding: 10px;
+      font-size: 12px;
+      border: 2px solid white;
+      margin-bottom: 10px;
+    }
+
+    #inventory div {
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
@@ -67,19 +80,28 @@
     <div id="game" style="display:none;">
       <div class="stats" id="player-stats"></div>
       <div class="stats" id="enemy-stats"></div>
+      <div id="biome" class="stats"></div>
+      <div id="message-box" class="stats"></div>
+      <div id="enemy-action-box" class="stats" style="color: red;"></div>
 
       <div id="combat-actions">
         <button onclick="fireball()">Fireball</button>
         <button onclick="heal()">Heal</button>
         <button onclick="swordAttack()">Sword Attack</button>
         <button onclick="block()">Block</button>
-        <button onclick="UseReviveCrystal()">Revive Crystal</button>
+        <button onclick="criticalHit()">Power Attack</button>
+        <button onclick="useItem()">Use Item</button>
+      </div>
+
+      <div id="inventory-section">
+        <h3>Inventory</h3>
+        <div id="inventory"></div>
       </div>
 
       <div id="game-result"></div>
     </div>
   </div>
 
-  <script src="game.js"></script>
+  <script src="game.js" src="biome.js" defer></script>
 </body>
 </html>

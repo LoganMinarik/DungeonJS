@@ -8,7 +8,9 @@ let player = {
   maxStamina: 50,
   level: 0,
   xp: 0,
-  inventory: Array(20).fill("Potion")
+  inventory: Array(20).fill("Potion"),
+  // #For dev testing# inventory: Array(20).fill("Potion").concat(["DeathClaw Juice", "DeathClaw Juice", "Potion+", "Ether", "PP Up", "Bomb-ba", "Elixir", "Nyan Cat", "Doge"]),
+  reviveCrystals: 5,
 };
 let enemy = {
   name: '',
@@ -137,7 +139,14 @@ function updateInventory() {
 
   const itemRarities = {
     "Potion": "Common",
-    "DeathClaw Milk": "Void"
+    "DeathClaw Juice": "Void",
+    "Potion+": "Uncommon",
+    "Ether": "Uncommon",
+    "PP Up": "Rare",
+    "Bomb-ba": "Rare",
+    "Elixir": "Epic",
+    "Nyan Cat": "Mythical",
+    "Doge": "Mythical",
   };
 
   for (const [item, count] of Object.entries(itemCounts)) {
@@ -164,13 +173,66 @@ function useItem() {
       player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
       player.selectedItem = undefined;
       updateStats();
-    } else if (selectedItem === "DeathClaw Milk") {
+    } else if (selectedItem === "DeathClaw Juice") {
       player.level += 5;
       player.maxHealth = 100 + player.level * 10;
       player.maxMagic = 100 + player.level * 10;
       player.health = player.maxHealth;
       player.magic = player.maxMagic;
-      displayMessage(`You used ${selectedItem} and leveled up by 5 levels!`);
+      displayMessage(`You used ${selectedItem} and leveled up by 5 levels! You probably shouldn't have done that.`);
+      player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
+      player.selectedItem = undefined;
+      updateStats();
+    }
+    else if (selectedItem === "Potion+") {
+      player.health = Math.min(player.health + 100, player.maxHealth);
+      displayMessage(`You used a ${selectedItem} and restored 100 health!`);
+      player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
+      player.selectedItem = undefined;
+      updateStats();
+    }
+    else if (selectedItem === "Ether") {
+      player.magic = Math.min(player.magic + 50, player.maxMagic);
+      displayMessage(`You used a ${selectedItem} and restored 50 magic!`);
+      player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
+      player.selectedItem = undefined;
+      updateStats();
+    }
+    else if (selectedItem === "PP Up") {
+      player.maxMagic += 10;
+      displayMessage(`You used a ${selectedItem} and increased your max magic by 10! You feel more powerful and ready to take on the world!`);
+      player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
+      player.selectedItem = undefined;
+      updateStats();
+    }
+    else if (selectedItem === "Bomb-ba") {
+      enemy.health -= 500;
+      displayMessage(`You used a ${selectedItem} and dealt 500 damage to the enemy!`);
+      player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
+      player.selectedItem = undefined;
+      updateStats();
+    }
+    else if (selectedItem === "Elixir") {
+      player.health = player.maxHealth;
+      player.magic = player.maxMagic;
+      player.stamina = player.maxStamina;
+      displayMessage(`You used a ${selectedItem} and restored all health, magic, and stamina!`);
+      player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
+      player.selectedItem = undefined;
+      updateStats();
+    }
+    else if (selectedItem === "Nyan Cat") {
+      player.health = Math.min(player.health + 100, player.maxHealth);
+      player.magic = Math.min(player.magic + 100, player.maxMagic);
+      displayMessage(`You used a ${selectedItem} and restored 100 health and magic!`);
+      player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
+      player.selectedItem = undefined;
+      updateStats();
+    }
+    else if (selectedItem === "Doge") {
+      player.health = Math.min(player.health + 200, player.maxHealth);
+      player.magic = Math.min(player.magic + 200, player.maxMagic);
+      displayMessage(`You used a ${selectedItem} and restored 200 health and magic!`);
       player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
       player.selectedItem = undefined;
       updateStats();
@@ -239,9 +301,25 @@ function checkCombatStatus() {
       player.reviveCrystals += 1;
       displayMessage("You found a Revive Crystal!");
     }
-    if (enemy.name === 'DeathClaw' && Math.random() < 1) { // 50% chance to drop DeathClaw Milk
-      player.inventory.push("DeathClaw Milk");
-      displayMessage("You found DeathClaw Milk!");
+    if (enemy.name === 'Mimic' && Math.random() < .5) { // 50% chance to drop a rare item
+      player.inventory.push("PP Up");
+      displayMessage("You obtained PP Up!");
+    }
+    if (enemy.name === 'Treasure Guardian' && Math.random() < .5) { // 50% chance to drop a legendary item
+      player.inventory.push("Elixir");
+      displayMessage("You obtained Elixir!");
+    }
+    if (enemy.name === 'Dragon' && Math.random() < .5) { // 50% chance to drop a mythical item
+      player.inventory.push("bomb-ba");
+      displayMessage("You obtained Bomb-ba!");
+    }
+    if (enemy.name === 'Werewolf' && Math.random() < .5) { // 50% chance to drop a mythical item
+      player.inventory.push("Potion+");
+      displayMessage("You obtained Potion+!");
+    }
+    if (enemy.name === 'DeathClaw' && Math.random() < .9) { // 90% chance to drop DeathClaw Milk
+      player.inventory.push("DeathClaw Juice");
+      displayMessage("You some how obtained DeathClaw Juice!");
     }
     if (Math.random() < 0.1) { // 10% chance to change biome
       currentBiome = biomes[Math.floor(Math.random() * biomes.length)];
@@ -281,7 +359,7 @@ function checkCombatStatus() {
   }
 }
 function levelUpCheck() {
-  let xpNeeded = player.level * 50 + 100;
+  let xpNeeded = Math.pow(player.level + 1, 3) * 50; // Exponential XP requirement
   if (player.xp >= xpNeeded) {
     player.level++;
     player.maxHealth = 100 + player.level * 10; // Increase max health with each level
@@ -300,9 +378,9 @@ function criticalHit() {
     enemy.health -= damage;
     updateStats();
     checkCombatStatus();
-    displayMessage(`You perform a critical hit and dealt ${damage.toFixed(2)} damage!`);
+    displayMessage(`You perform a power attack and dealt ${damage.toFixed(2)} damage!`);
   } else {
-    displayMessage("Not enough stamina to perform a critical hit!");
+    displayMessage("Not enough stamina to perform a power attack!");
   }
 }
 document.addEventListener("keydown", function(event) {
