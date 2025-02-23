@@ -8,12 +8,19 @@ const rarityColors = {
   "Epic": "purple",
   "Legendary": "orange",
   "Mythical": "yellow",
-  "Viod": "#00c3e3" // Hatsune Miku teal
+  "Miku": "#38ffe2" // Hatsune Miku teal aka the glitch teir
 };
 
 const itemRarities = {
   "Potion": "Common",
-  "DeathClaw Milk": "Void"
+  "Potion+": "Uncommon",
+  "Ether": "Uncommon",
+  "PP Up": "Rare",
+  "Bomb-ba": "Rare",
+  "Elixir": "Epic",
+  "Nyan Cat": "Mythical",
+  "Doge Coin": "Legendary",
+  "DeathClaw Milk": "Miku"
 };
 
 function updateInventory() {
