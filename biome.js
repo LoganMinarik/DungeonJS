@@ -55,7 +55,7 @@ function generateEnemy() {
     'GlowShroom Cavern': [
       { name: 'Glowing Slime', monsterDrops: ['Glowing Slime Gel', 'Potion'] },
       { name: 'Slime Egg Cluster', monsterDrops: ['Glowing Slime Gel', 'Potion'] },
-      { name: 'Glowing Mimic Chest', monsterDrops: ['Etherium', 'Potion+'] }
+      { name: 'Glowing Mimic Chest', monsterDrops: ['Etherium', 'Potion+', 'Glowing Slime Gel'] }
     ]
   };
 
