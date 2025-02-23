@@ -8,72 +8,91 @@ function startGame() {
     return;
   }
   document.getElementById("start-game").style.display = 'none';
+  document.getElementById("race-selection").style.display = 'block';
+}
+
+function selectRace(race) {
+  player.race = race;
+  if (race === 'Kobold') {
+    player.maxHealth = 75;
+    player.health = 75;
+    player.maxMagic = 125;
+    player.magic = 125;
+  }
+  else if (race === 'Elf') {
+    player.maxHealth = 100;
+    player.health = 100;
+    player.maxMagic = 200;
+    player.magic = 200;
+  }
+  document.getElementById("race-selection").style.display = 'none';
   document.getElementById("game").style.display = 'block';
   generateEnemy();
   updateStats();
-  displayMessage(`Welcome, ${player.name}! Get ready to fight!`);
+  displayMessage(`Welcome, ${player.name} the ${player.race}! Get ready to fight!`);
 }
+
 function generateEnemy() {
   const biomeEnemies = {
-    'Moss Forest': ['Goblin', 'Orc', 'Werewolf'],
-    'Runes': ['Skeleton', 'Imp', 'DeathClaw'],
-    'Cave': ['Troll', 'Dragon'],
-    'Chest Room': ['Mimic', 'Treasure Guardian']
+    'Moss Forest': [
+      { name: 'Goblin', monsterDrops: ['Potion', 'Ether'] },
+      { name: 'Orc', monsterDrops: ['Potion+', 'Bomb-ba'] },
+      { name: 'Werewolf', monsterDrops: ['Potion+', 'Potion'] }
+    ],
+    'Runes': [
+      { name: 'Skeleton', monsterDrops: ['Ether', 'Potion'] },
+      { name: 'Imp', monsterDrops: ['Potion+', 'Ether'] },
+      { name: 'DeathClaw', monsterDrops: ['DeathClaw Milk', 'Potion+'] }
+    ],
+    'Cave': [
+      { name: 'Troll', monsterDrops: ['Potion+', 'Ether'] },
+      { name: 'Dragon', monsterDrops: ['Bomb-ba', 'Elixir'] }
+    ],
+    'Chest Room': [
+      { name: 'Mimic', monsterDrops: ['PP Up', 'Doge Coin'] },
+      { name: 'Treasure Guardian', monsterDrops: ['Elixir', 'Ether'] }
+    ],
+    'GlowShroom Cavern': [
+      { name: 'Glowing Slime', monsterDrops: ['Glowing Slime Gel', 'Potion'] },
+      { name: 'Slime Egg Cluster', monsterDrops: ['Glowing Slime Gel', 'Potion'] },
+      { name: 'Glowing Mimic Chest', monsterDrops: ['Etherium', 'Potion+'] }
+    ]
   };
-  const randomType = biomeEnemies[currentBiome][Math.floor(Math.random() * biomeEnemies[currentBiome].length)];
-  enemy.name = randomType;
+
+  const randomEnemy = biomeEnemies[currentBiome][Math.floor(Math.random() * biomeEnemies[currentBiome].length)];
+  enemy.name = randomEnemy.name;
+  enemy.monsterDrops = randomEnemy.monsterDrops;
   enemy.level = Math.min(player.level + 1, Math.floor(Math.random() * player.level) + 1);
-  switch (randomType) {
-    case 'Goblin':
-      enemy.health = (30 + Math.floor(Math.random() * 20)) * enemy.level;
-      enemy.attack = Math.min((5 + Math.floor(Math.random() * 5)) * enemy.level, player.health / 2);
-      enemy.xpReward = 10 * enemy.level;
-      break;
-    case 'Imp':
-      enemy.health = (20 + Math.floor(Math.random() * 10)) * enemy.level;
-      enemy.attack = Math.min((5 + Math.floor(Math.random() * 5)) * enemy.level, player.health / 2);
-      enemy.xpReward = 8 * enemy.level;
-      break;
-    case 'Orc':
-      enemy.health = (60 + Math.floor(Math.random() * 30)) * enemy.level;
-      enemy.attack = Math.min((10 + Math.floor(Math.random() * 10)) * enemy.level, player.health / 2);
-      enemy.xpReward = 20 * enemy.level;
-      break;
-    case 'Dragon':
-      enemy.health = (120 + Math.floor(Math.random() * 80)) * enemy.level;
-      enemy.attack = Math.min((20 + Math.floor(Math.random() * 20)) * enemy.level, player.health / 2);
-      enemy.xpReward = 50 * enemy.level;
-      break;
-    case 'Troll':
-      enemy.health = (90 + Math.floor(Math.random() * 40)) * enemy.level;
-      enemy.attack = Math.min((15 + Math.floor(Math.random() * 10)) * enemy.level, player.health / 2);
-      enemy.xpReward = 30 * enemy.level;
-      break;
-    case 'Skeleton':
-      enemy.health = (40 + Math.floor(Math.random() * 20)) * enemy.level;
-      enemy.attack = Math.min((10 + Math.floor(Math.random() * 10)) * enemy.level, player.health / 2);
-      enemy.xpReward = 15 * enemy.level;
-      break;
-    case 'DeathClaw':
-      enemy.health = (150 + Math.floor(Math.random() * 100)) * enemy.level;
-      enemy.attack = Math.min((30 + Math.floor(Math.random() * 30)) * enemy.level, player.health / 2);
-      enemy.xpReward = 70 * enemy.level;
-      break;
-    case 'Werewolf':
-      enemy.health = (110 + Math.floor(Math.random() * 40)) * enemy.level;
-      enemy.attack = Math.min((20 + Math.floor(Math.random() * 10)) * enemy.level, player.health / 2);
-      enemy.xpReward = 40 * enemy.level;
-      break;
-    case 'Mimic':
-      enemy.health = (80 + Math.floor(Math.random() * 40)) * enemy.level;
-      enemy.attack = Math.min((15 + Math.floor(Math.random() * 10)) * enemy.level, player.health / 2);
-      enemy.xpReward = 25 * enemy.level;
-      break;
-    case 'Treasure Guardian':
-      enemy.health = (100 + Math.floor(Math.random() * 50)) * enemy.level;
-      enemy.attack = Math.min((20 + Math.floor(Math.random() * 15)) * enemy.level, player.health / 2);
-      enemy.xpReward = 35 * enemy.level;
-      break;
+  enemy.health = 50 + enemy.level * 10;
+  enemy.attack = 10 + enemy.level * 2;
+  enemy.xpReward = 20 + enemy.level * 5;
+  enemy.dropChance = 0.5; // Base drop chance
+}
+
+function determineDrop(monster) {
+  const drops = [];
+  monster.monsterDrops.forEach(item => {
+    const rarity = itemRarities[item];
+    const chance = rarityChances[rarity];
+    if (Math.random() < chance) {
+      drops.push(item);
+    }
+  });
+  return drops;
+}
+
+// Example usage in checkCombatStatus function
+function checkCombatStatus() {
+  if (enemy.health <= 0) {
+    player.xp += Math.floor(enemy.xpReward * (1 + Math.random()));
+    levelUpCheck();
+    const drops = determineDrop(enemy);
+    drops.forEach(drop => {
+      player.inventory.push(drop);
+      displayMessage(`You obtained ${drop}!`);
+    });
+    generateEnemy();
+    updateStats();
+    return;
   }
-  displayMessage(`A wild ${enemy.name} (Level ${enemy.level}) appears!`);
 }

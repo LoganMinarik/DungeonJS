@@ -13,6 +13,9 @@ const rarityColors = {
 
 const itemRarities = {
   "Potion": "Common",
+  "Glowing Slime Gel": "Common",
+  "Etherium": "Rare",
+  "Monero XMR": "Legendary",
   "Potion+": "Uncommon",
   "Ether": "Uncommon",
   "PP Up": "Rare",
@@ -114,6 +117,21 @@ function useItem() {
     }
     else if (selectedItem === "Doge Coin") {
       displayMessage(`You used a ${selectedItem} and realized it's not a usable item!🤓👆"well achuly it's a valuable item but you have low IQ and don't understand how decentualized markets work" - Some Random Nerd 2025`);
+      player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
+      player.selectedItem = undefined;
+      updateStats();
+    }
+    else if (selectedItem === "Glowing Slime Gel") {
+      player.health = Math.min(player.health + 25, player.maxHealth);
+      displayMessage(`You used a ${selectedItem} and restored 25 health!`);
+      player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
+      player.selectedItem = undefined;
+      updateStats();
+    }
+    else if (selectedItem === "Etherium") {
+      player.magic = Math.min(player.magic + 100, player.maxMagic);
+      player.maxMagic += 100;
+      displayMessage(`You used a ${selectedItem} and restored 100 magic and gained a buff of 100 magic!`);
       player.inventory.splice(player.inventory.indexOf(selectedItem), 1);
       player.selectedItem = undefined;
       updateStats();

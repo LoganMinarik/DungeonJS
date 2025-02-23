@@ -3,6 +3,8 @@ console.log('player.js loaded');
 
 let player = {
   name: '',
+  race: '',
+  class: '',
   health: 100,
   maxHealth: 100,
   magic: 100,
@@ -31,7 +33,7 @@ function levelUpCheck() {
 
 function updateStats() {
   document.getElementById("player-stats").innerHTML = `
-    <strong>${player.name}'s Stats:</strong><br>
+    <strong>${player.name} the ${player.race}'s Stats:</strong><br>
     Health: ${player.health}/${player.maxHealth} | Magic: ${player.magic}/${player.maxMagic} | Stamina: ${player.stamina}/${player.maxStamina} | Revive Crystals: ${player.reviveCrystals} | Level: ${player.level} | XP: ${player.xp}
   `;
   document.getElementById("enemy-stats").innerHTML = `
@@ -42,4 +44,18 @@ function updateStats() {
     <strong>Current Biome:</strong> ${currentBiome}
   `;
   updateInventory();
+}
+
+function regenerateHealth() {
+  if (player.race === 'Kobold') {
+    player.health = Math.min(player.health + player.maxHealth * 0.05, player.maxHealth);
+    updateStats();
+  }
+}
+
+function regenerateMagic() {
+  if (player.race === 'Elf') {
+    player.magic = Math.min(player.magic + player.maxMagic * 0.05, player.maxMagic);
+    updateStats();
+  }
 }

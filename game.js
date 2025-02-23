@@ -12,7 +12,7 @@ let enemy = {
   dropChance: 0.5,
   level: 1
 };
-let biomes = ['Moss Forest', 'Runes', 'Cave', 'Chest Room'];
+let biomes = ['Moss Forest', 'Runes', 'Cave', 'Chest Room', 'GlowShroom Cavern'];
 let currentBiome = biomes[0];
 function displayMessage(message) {
   document.getElementById("message-box").innerHTML = message;
@@ -50,6 +50,10 @@ function updateInventory() {
     "Elixir": "Epic",
     "Nyan Cat": "Mythical",
     "Doge Coin": "Mythical",
+    "Etherium": "Rare",
+    "Glowing Slime Gel": "Common",
+    "Glowing Mimic Chest": "Rare",
+    "Monero XMR": "Legendary",
   };
 
   for (const [item, count] of Object.entries(itemCounts)) {
