@@ -56,7 +56,14 @@ function generateEnemy() {
       { name: 'Glowing Slime', monsterDrops: ['Glowing Slime Gel', 'Potion'] },
       { name: 'Slime Egg Cluster', monsterDrops: ['Glowing Slime Gel', 'Potion'] },
       { name: 'Glowing Mimic Chest', monsterDrops: ['Etherium', 'Potion+', 'Glowing Slime Gel'] }
-    ]
+    ],
+    'Lava Caverns': [
+      { name: 'Lava Leach Cluster', monsterDrops: ['Magma Shard', 'Lava Leach'] },
+      { name: 'Lava Elemental', monsterDrops: ['Lava Crystal', 'Lava Leach'] },
+      { name: 'Lava Golem', monsterDrops: ['Lava Core', 'Lava Leach'] },
+      { name: 'Lava Dragon', monsterDrops: ['Lava Essence', 'Lava Leach'] },
+      { name: 'Red Succubus', monsterDrops: ['Lava Heart', 'Lava Leach', 'Lava Crystal', 'Magma Shard', 'Lava Core'] },
+    ],
   };
 
   const randomEnemy = biomeEnemies[currentBiome][Math.floor(Math.random() * biomeEnemies[currentBiome].length)];
@@ -95,4 +102,25 @@ function checkCombatStatus() {
     updateStats();
     return;
   }
+}
+
+function updateBiomeHue(biome) {
+  const biomeHues = {
+    'Moss Forest': '90deg', // Green hue
+    'Runes': '180deg', // Blue hue
+    'Cave': '270deg', // Purple hue
+    'Chest Room': '45deg', // Yellow hue
+    'GlowShroom Cavern': '300deg', // Pink hue
+    'Lava Caverns': '0deg' // Red hue
+  };
+
+  const hue = biomeHues[biome] || '0deg';
+  document.documentElement.style.setProperty('--hue-rotate', hue);
+}
+
+// Call updateBiomeHue whenever the biome changes
+function changeBiome(newBiome) {
+  currentBiome = newBiome;
+  updateBiomeHue(newBiome);
+  displayMessage(`You have entered a new biome: ${newBiome}`);
 }
